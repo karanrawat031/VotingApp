@@ -1,2 +1,42 @@
 <% include ./partials/header %>
+<br><br><br>
+    <div class='ui main text container segment'>
+        <div class='ui huge header'>New Poll</div>
+        <form class='ui form' action='/polls' method='POST'>
+            <div class='field'>
+              <label>Poll Question</label>
+              <input type='text' name='question' placeholder="Question"></input>
+              <label class='wrapper'>Choice</label>
+            </div>
+          <a class='addChoice ui orange basic button'>Add Choice</a>
+          <input class='ui green basic button' type="submit"></input>
+        </form>
+    </div>
+    <script>
+    window.onload = function() {
+      if (window.jQuery) {
+       $(document).ready(function() {
+       var max_fields      = 10; //maximum input boxes allowed
+       var wrapper         = $(".wrapper"); //Fields wrapper
+       var addChoice      = $(".addChoice"); //Add button ID
+
+       var x = 1; //initlal text box count
+       $(addChoice).click(function(e){ //on add input button click
+           e.preventDefault();
+           if(x < max_fields){ //max input box allowed
+               x++; //text box increment
+               $(wrapper).append('<div><input type="text" name="choice[]"/><a href="#" class="removeField">Remove</a></div>'); //add input box
+           }
+       });
+
+       $(wrapper).on("click",".removeField", function(e){ //user click on remove text
+           e.preventDefault();
+           $(this).parent('div').remove();
+           x--;
+       })
+      });
+      } else {
+      }
+      }
+    </script>
 <% include ./partials/footer %>

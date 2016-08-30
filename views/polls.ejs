@@ -1,0 +1,23 @@
+<% include ./partials/header %>
+
+<div class='ui main text container'>
+	<div class="ui huge header">
+		<h2>Voting App-FCC</h2>
+		<p>Used for adding polls</p>
+	</div>
+	<div class='ui top attached segment'>
+		<div class='ui divided items'>
+			<% found.forEach(function(found){ %>
+			   <div class='item'>
+			   		<div class='content'>
+			   			<p class='header'><%= found.question %></p>
+			   		</div><hr>
+			   </div>
+			<% }); %>
+		</div>
+	</div>
+</div>
+
+
+
+<% include ./partials/footer %>
