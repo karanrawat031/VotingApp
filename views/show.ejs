@@ -7,14 +7,21 @@
 	</div>
 	<div class='ui top attached segment'>
 		<div class='ui divided items'>
-			<% found.forEach(function(found){ %>
 			   <div class='item'>
 			   		<div class='content'>
-			   			<a class='header' href='polls/show/<%= found.id %>'><%= found.question %></a>
+			   			<p class='header'><%= foundOne.question %></p>
 			   		</div><hr>
 			   </div>
-			<% }); %>
 		</div>
+    <% foundOne.choice.forEach(function(choice){ %>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" name="choice[]">
+          <label><%=choice%></label>
+        </div>
+      </div>
+    <% }); %>
+
 	</div>
 </div>
 

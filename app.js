@@ -24,7 +24,7 @@ app.get('/',function(req,res){
 });
 
 //index route
-app.get('/home',function(req,res){
+app.get('/add',function(req,res){
    res.render('index');
 });
 
@@ -52,6 +52,18 @@ app.post('/polls',function(req,res){
       res.redirect('/polls');
     }
   });
+});
+
+//showing a particular polls
+app.get('/polls/show/:id',function(req,res){
+   Voting.findById(req.params.id,function(err,foundOne){
+     if(err){
+       console.log(err);
+       res.redirect('/polls');
+     }else{
+       res.render('show',{foundOne:foundOne});
+     }
+   });
 });
 
 app.listen(port);
