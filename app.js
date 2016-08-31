@@ -8,7 +8,8 @@ mongoose.connect('mongodb://localhost/votingapp');
 
 var votingSchema = new mongoose.Schema({
     question:String,
-    choice:[String]
+    created_at: {type: Date, default: Date.now},
+	  choice: [String]
 });
 
 var  Voting= mongoose.model('Voting',votingSchema);
