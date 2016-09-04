@@ -14,21 +14,26 @@
 			   		</div><hr>
 			   </div>
 		</div>
+		<form action="/polls/show/<%=foundOne.id%>/vote" method="POST">
 		<% foundOne.options.forEach(function(option){ %>
 	      <div class="field">
 	        <div class="ui radio checkbox">
-	          <input type="radio" name="choices[]">
+	          <input type="radio" name="choices[]" value="<%=option.text%>">
 	          <label><%=option.text%></label>
 	        </div>
 	      </div>
     	<% }); %>
-
-    	<a class='addVote mini ui orange basic button' style="margin-top:7px;">Vote</a>
+    	<button class='addVote mini ui orange basic button' style="margin-top:7px;" type="submit">Vote</button>
+		</form>
 	</div>		
 	<canvas id="myChart"></canvas>
 </div>
 
 <script>
+// $('.addVote').click(function(){
+// 	var selected = $('#myForm');
+// 	alert(selected);
+// 		});
 var array = new Array();
 <% foundOne.options.forEach(function(option){ %>
    array.push('<%=option.text%>');

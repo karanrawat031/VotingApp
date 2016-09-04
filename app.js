@@ -91,6 +91,20 @@ app.get('/polls/show/:id',function(req,res){
 });
 
 //adding vote to particular choice of a particular post
+app.post('/polls/show/:id/vote',function(req,res){
 
+      var foundC = req.body.choices[0];
+      console.log(foundC);
+          Poll.findOne({'options.text':foundC},function(err,option){
+            if(err){
+              console.log(err);
+              res.redirect('back');
+            }else{
+              var output = option.options.filter(function(value){ return value.text==foundC;});
+              console.log(output);
+              res.redirect('back');
+            }
+          });
+        });  
 app.listen(port);
 console.log('The magic happens on port ' + port);
