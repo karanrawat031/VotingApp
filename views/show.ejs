@@ -14,43 +14,38 @@
 			   		</div><hr>
 			   </div>
 		</div>
-    <% foundOne.choice.forEach(function(choice){ %>
-      <div class="field">
-        <div class="ui radio checkbox">
-          <input type="radio" name="choice[]">
-          <label><%=choice%></label>
-        </div>
-      </div>
-    <% }); %>
-    <a class='addVote mini ui orange basic button' style="margin-top:7px;">Vote</a>
-	</div>
-  <canvas id="myChart" width="400" height="400"></canvas>
+		<% foundOne.options.forEach(function(option){ %>
+	      <div class="field">
+	        <div class="ui radio checkbox">
+	          <input type="radio" name="choices[]">
+	          <label><%=option.text%></label>
+	        </div>
+	      </div>
+    	<% }); %>
+
+    	<a class='addVote mini ui orange basic button' style="margin-top:7px;">Vote</a>
+	</div>		
+	<canvas id="myChart"></canvas>
 </div>
 
 <script>
-$(document).ready(function() {
-  var addVote = $(".addVote"); //addvote Call
-  $(addVote).click(function(e){
-    e.preventDefault();
-
-  });
-});
-var ctx = document.getElementById("myChart");
 var array = new Array();
-<% foundOne.choice.forEach(function(choice){ %>
-   array.push('<%=choice%>');
+<% foundOne.options.forEach(function(option){ %>
+   array.push('<%=option.text%>');
 <% }); %>
-// var array2 = new Array();
-// <% foundOne.choice.forEach(function(choice){ %>
-//    array.push('<%=choice.votes%>');
-// <% }); %>
+var array2 = new Array();
+<% foundOne.options.forEach(function(option){ %>
+   array2.push('<%=option.votes%>');
+<% }); %>
+
+var ctx = document.getElementById("myChart");
 var myChart = new Chart(ctx, {
 type: 'bar',
 data: {
     labels: array,
     datasets: [{
         label: '# of Votes',
-        data: [1, 2],
+        data: array2,
         backgroundColor: [
             'rgba(255, 99, 132, 0.2)',
             'rgba(54, 162, 235, 0.2)',
@@ -74,7 +69,8 @@ options: {
     scales: {
         yAxes: [{
             ticks: {
-                beginAtZero:true
+                beginAtZero:true,
+                stepSize: 1
             }
         }]
     }

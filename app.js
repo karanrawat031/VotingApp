@@ -1,23 +1,37 @@
+'use strict'
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var port    = process.env.PORT || 8080;
+var methodOverride = require('method-override');
 
 mongoose.connect('mongodb://localhost/votingapp');
 
-var votingSchema = new mongoose.Schema({
-    question:String,
-    created_at: {type: Date, default: Date.now},
-	  choice: [String]
+const Schema = mongoose.Schema;
+
+//Options Schema
+const OptionSchema = new Schema({
+  text: String,
+  votes : {type: Number, default: 0}
 });
 
-var  Voting= mongoose.model('Voting',votingSchema);
+OptionSchema.method('vote', (updates, callback) => {
+  this.votes += 1;
+});
+
+const PollSchema = new Schema({
+  question : String,
+  options : [OptionSchema]
+});
+
+const Poll = mongoose.model('Poll', PollSchema);
+const Option = mongoose.model('Option', OptionSchema);
 
 app.set('view engine','ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
-
+app.use(methodOverride('_method'));
 
 //landing route
 app.get('/',function(req,res){
@@ -31,7 +45,7 @@ app.get('/add',function(req,res){
 
 //all polls get route
 app.get('/polls',function(req,res){
-   Voting.find({},function(err,found){
+   Poll.find({},function(err,found){
      if(err){
        console.log(err);
        res.redirect('/polls');
@@ -43,21 +57,29 @@ app.get('/polls',function(req,res){
 
 //adding post to db
 app.post('/polls',function(req,res){
-  var question = req.body.question;
-  var choice = req.body.choice;
-  Voting.create({question:question,choice:choice},function(err,created){
-    if(err){
-      console.log(err);
-      res.redirect('/polls');
-    }else{
-      res.redirect('/polls');
-    }
+    
+  let question = req.body.question;
+  let options = req.body.choices;
+  let optSchemas = options.map( (opt) => {
+    return new Option({
+      text : opt
+    });
   });
+  let poll = new Poll({
+    question : question,
+    options : optSchemas
+  });
+  poll.save((err)=>{
+    if(err) return next(err);
+    res.redirect('/polls');
+  });
+
 });
 
 //showing a particular polls
 app.get('/polls/show/:id',function(req,res){
-   Voting.findById(req.params.id,function(err,foundOne){
+
+  Poll.findById(req.params.id,function(err,foundOne){
      if(err){
        console.log(err);
        res.redirect('/polls');
@@ -65,7 +87,10 @@ app.get('/polls/show/:id',function(req,res){
        res.render('show',{foundOne:foundOne});
      }
    });
+
 });
+
+//adding vote to particular choice of a particular post
 
 app.listen(port);
 console.log('The magic happens on port ' + port);
