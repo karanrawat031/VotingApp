@@ -91,20 +91,73 @@ app.get('/polls/show/:id',function(req,res){
 });
 
 //adding vote to particular choice of a particular post
-app.post('/polls/show/:id/vote',function(req,res){
+app.put('/polls/show/:id',function(req,res){
 
-      var foundC = req.body.choices[0];
-      console.log(foundC);
-          Poll.findOne({'options.text':foundC},function(err,option){
-            if(err){
-              console.log(err);
-              res.redirect('back');
-            }else{
-              var output = option.options.filter(function(value){ return value.text==foundC;});
-              console.log(output);
-              res.redirect('back');
-            }
+      Poll.findById(req.params.id,function(err,found){
+        if(err){
+          console.log(err);
+          res.redirect('back');
+        }else{
+          var selected = req.body.choices;
+          var options = found.options;
+          console.log(options);
+          options.forEach(function(option){
+              if(option.text == selected){
+                option.votes+=1;
+              }
           });
-        });  
+          console.log(options);
+           res.redirect('back');
+           found.save(function(err){
+            console.log(err);
+           });
+        }
+      });
+
+});
+
+// app.put('/polls/show/:id',function(req,res){
+//   var foundC = req.body.choices;
+//   console.log(foundC);
+//     var updatedCamp = {};
+//     Campground.findByIdAndUpdate(req.params.id,updatedCamp,function(err,updatedCampground){
+//         if(err){
+//             console.log('Error found');
+//             console.log(err);
+//             res.redirect('/campgrounds');
+//         }else{
+//             function findOp(ch) { 
+//                   return ch.text == foundC;
+//               }
+//             var selected = option.options.find(findOp);
+//             res.redirect('/campgrounds/'+req.params.id);    
+//         }
+//     });
+// });
+      // var foundC = req.body.choices;
+      // console.log(foundC);
+      //     Poll.findById(req.params.id,function(err,option){
+      //       if(err){
+      //         console.log(err);
+      //         res.redirect('back');
+      //       }else{
+      //         function findOp(ch) { 
+      //             return ch.text == foundC;
+      //         }
+      //         var selected = option.options.find(findOp);
+      //         selected.votes +=1;
+      //         console.log(selected.id); 
+      //         Option.findByIdAndUpdate(selected.id,selected.votes,function(err,updated){
+      //           if(err){
+      //             console.log(err);
+      //             res.redirect('back');
+      //           }else{
+      //             console.log(updated);
+      //             res.redirect('back');
+      //           }
+      //         });
+      //       }
+      //       });
+
 app.listen(port);
 console.log('The magic happens on port ' + port);

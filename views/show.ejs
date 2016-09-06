@@ -14,7 +14,7 @@
 			   		</div><hr>
 			   </div>
 		</div>
-		<form action="/polls/show/<%=foundOne.id%>/vote" method="POST">
+		<form action="/polls/show/<%=foundOne.id%>?_method=PUT" method="POST">
 		<% foundOne.options.forEach(function(option){ %>
 	      <div class="field">
 	        <div class="ui radio checkbox">
@@ -82,5 +82,5 @@ options: {
 }
 });
 </script>
-
+<br><br><br>
 <% include ./partials/footer %>
