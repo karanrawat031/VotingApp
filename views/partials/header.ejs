@@ -12,6 +12,13 @@
  		<div class='header item'><i class='idea icon'>Vote</i></div>
  		<a href="/" class='item'>Home</a>
     <a href="/polls" class='item'>All Polls</a>
+       <% if(!currentUser){ %>
+ 		<a href="/register" class='item'>Register</a>
+ 		<a href="/login" class='item'>Login</a>
+ 	   <% } else { %>	
+ 	   	<a href="/mypolls" class='item'>Signed In As <%= currentUser.username %></a>
  		<a href="/add" class='item'>Add New Poll</a>
+ 		<a href="/logout" class='item'>LogOut</a>
+ 	   <% } %>	
  	</div>
  </div>
